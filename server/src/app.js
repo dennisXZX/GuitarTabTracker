@@ -13,9 +13,9 @@ app.use(bodyParser.json())
 app.use(cors())
 
 // define routes
-app.get('/status', (req, res) => {
+app.post('/register', (req, res) => {
   res.send({
-    message: 'hello'
+    message: `Hello ${req.body.email}! Your user was registered!`
   })
 })
 
