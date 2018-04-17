@@ -1,10 +1,11 @@
-console.log('Yo mate, your server is up and running')
-
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const morgan = require('morgan')
+const { sequelize } = require('./models')
+const config = require('./config/config')
 
+// create an Express app
 const app = express()
 
 // use middleware
@@ -12,11 +13,11 @@ app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(cors())
 
-// define routes
-app.post('/register', (req, res) => {
-  res.send({
-    message: `Hello ${req.body.email}! Your user was registered!`
-  })
-})
+// import routes
+require('./routes')(app)
 
-app.listen(process.env.PORT || 8081)
+sequelize.sync()
+  .then(() => {
+    app.listen(config.port)
+    console.log(`Server started on port ${config.port}`)
+  })
